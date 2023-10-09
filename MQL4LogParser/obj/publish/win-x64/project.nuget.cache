@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "O3Ka9EqLEBQLTBxSQoWXd97YrV48Ij5Sq92pKGEA4eUVZfE2hf4xq/HfOcTRJ5W8g46ekerXN1v4NSOTDOWY7g==",
+  "success": true,
+  "projectFilePath": "C:\\repo\\MQL4LogParser\\MQL4LogParser\\MQL4LogParser.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Tyler\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\6.0.22\\microsoft.netcore.app.runtime.win-x64.6.0.22.nupkg.sha512",
+    "C:\\Users\\Tyler\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\6.0.22\\microsoft.windowsdesktop.app.runtime.win-x64.6.0.22.nupkg.sha512",
+    "C:\\Users\\Tyler\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\6.0.22\\microsoft.aspnetcore.app.runtime.win-x64.6.0.22.nupkg.sha512"
+  ],
+  "logs": []
+}
