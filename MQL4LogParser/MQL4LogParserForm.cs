@@ -9,12 +9,16 @@ namespace MQL4LogParser
         {
             InitializeComponent();
 
+            StartDateTimePicker.CustomFormat = " ";
+            EndDateTimePicker.CustomFormat = " ";
+
             Parser = new Parser()
             {
                 Logger = new Logger(LoggerTextBox)
             };
         }
 
+        #region Control Event Handlers
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             if (BrowseLogFilesDialog.ShowDialog() == DialogResult.OK)
@@ -36,20 +40,20 @@ namespace MQL4LogParser
 
             Parser.Parse(BrowseLogFilesDialog.FileName);
 
-            StartDateTimePicker.MinDate = OrderStats.FirstOrderOperationTimestamp;
-            StartDateTimePicker.MaxDate = OrderStats.LastOrderOperationTimestamp;
-            StartDateTimePicker.Value = OrderStats.FirstOrderOperationTimestamp;
-            StartDateTimePicker.Enabled = true;
+            EnableDateTimePicker(StartDateTimePicker, OrderStats.FirstOrderOperationTimestamp);
+            EnableDateTimePicker(EndDateTimePicker, OrderStats.LastOrderOperationTimestamp);
 
-            EndDateTimePicker.MinDate = OrderStats.FirstOrderOperationTimestamp;
-            EndDateTimePicker.MaxDate = OrderStats.LastOrderOperationTimestamp;
-            EndDateTimePicker.Value = OrderStats.LastOrderOperationTimestamp;
-            EndDateTimePicker.Enabled = true;
-
-            StartDateTimePicker.Enabled = true;
-            EndDateTimePicker.Enabled = true;
             GenerateStandardReportButton.Enabled = true;
             GenerateHourlyReportButton.Enabled = true;
+        }
+
+        private void EnableDateTimePicker(DateTimePicker dtp, DateTime defaultValue)
+        {
+            dtp.MinDate = OrderStats.FirstOrderOperationTimestamp;
+            dtp.MaxDate = OrderStats.LastOrderOperationTimestamp;
+            dtp.Value = defaultValue;
+            dtp.Enabled = true;
+            dtp.CustomFormat = "MMM dd, yyyy - HH:mm:ss";
         }
 
         private void GenerateStandardReportButton_Click(object sender, EventArgs e)
@@ -83,6 +87,8 @@ namespace MQL4LogParser
                 LogException("", ex);
             }
         }
+
+        #endregion
 
         private void LogException(System.IO.IOException ex)
         {
