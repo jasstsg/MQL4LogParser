@@ -9,6 +9,7 @@ namespace MQL4LogParser
         {
             InitializeComponent();
 
+            this.Text = $"MQL4 Log Parser v{Environment.GetEnvironmentVariable("ClickOnce_CurrentVersion")}";
             StartDateTimePicker.CustomFormat = " ";
             EndDateTimePicker.CustomFormat = " ";
 
