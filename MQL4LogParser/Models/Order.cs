@@ -12,39 +12,44 @@ namespace MQL4LogParser.Models
         public Order(int id)
         {
             Id = id;
-            History = new OrderHistory();
+            History = new OrderHistory(this);
         }
     }
 
     public class OrderHistory : Dictionary<Operation, DateTime>
     {
+        public Order Order { get; private set; }
+        public OrderHistory(Order order)
+        {
+            Order = order;
+        }
 
         public void AddOpen(string date, string time)
         {
             DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.OPEN, datetime);
-            OrderStats.TrackStat(datetime, Operation.OPEN);
+            OrderStats.TrackStat(datetime, Operation.OPEN, this.Order);
         }
 
         public void AddClose(string date, string time)
         {
             DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.CLOSE, datetime);
-            OrderStats.TrackStat(datetime, Operation.CLOSE);
+            OrderStats.TrackStat(datetime, Operation.CLOSE, this.Order);
         }
 
         public void AddStop(string date, string time)
         {
             DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.STOP, datetime);
-            OrderStats.TrackStat(datetime, Operation.STOP);
+            OrderStats.TrackStat(datetime, Operation.STOP, this.Order);
         }
 
         public void AddTake(string date, string time)
         {
             DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.TAKE, datetime);
-            OrderStats.TrackStat(datetime, Operation.TAKE);
+            OrderStats.TrackStat(datetime, Operation.TAKE, this.Order);
         }
 
         private void Add(Operation operation, DateTime datetime)
@@ -81,6 +86,7 @@ namespace MQL4LogParser.Models
         public static DateTime LastOrderOperationTimestamp = default;
 
         public static Dictionary<DateTime, HourlyOrderStat> ByTheHour = new Dictionary<DateTime, HourlyOrderStat>();
+        public static Dictionary<DateTime, HourlyOrderStat> OpenedAtHour = new Dictionary<DateTime, HourlyOrderStat>();
         public static void Reset()
         {
             TotalOpens = 0;
@@ -93,7 +99,7 @@ namespace MQL4LogParser.Models
             ByTheHour.Clear();
         }
 
-        public static void TrackStat(DateTime datetime, Operation operation)
+        public static void TrackStat(DateTime datetime, Operation operation, Order order)
         {
             // Get the current hour
             DateTime currentHour = datetime.RoundDownToNearestHour();
@@ -104,24 +110,34 @@ namespace MQL4LogParser.Models
                 ByTheHour.Add(currentHour, new HourlyOrderStat());
             }
 
+            if (!OpenedAtHour.ContainsKey(currentHour))
+            {
+                OpenedAtHour.Add(currentHour, new HourlyOrderStat());
+            }
+
             // Increment the relavent operation during that hour
+            DateTime OpenedAtDateTimeHour = !operation.Equals(Operation.OPEN) ? order.History[Operation.OPEN].RoundDownToNearestHour() : default;
             switch (operation)
             {
                 case Operation.OPEN:
                     TotalOpens++;
                     ByTheHour[currentHour].Opens++;
+                    OpenedAtHour[currentHour].Opens++;
                     break;
                 case Operation.CLOSE:
                     TotalCloses++;
                     ByTheHour[currentHour].Closes++;
+                    OpenedAtHour[OpenedAtDateTimeHour].Closes++;
                     break;
                 case Operation.STOP:
                     TotalStops++;
-                    ByTheHour[currentHour].Stops++; 
+                    ByTheHour[currentHour].Stops++;
+                    OpenedAtHour[OpenedAtDateTimeHour].Stops++;
                     break;
                 case Operation.TAKE: 
                     TotalTakes++;
-                    ByTheHour[currentHour].Takes++; 
+                    ByTheHour[currentHour].Takes++;
+                    OpenedAtHour[OpenedAtDateTimeHour].Takes++;
                     break;
             }
         }

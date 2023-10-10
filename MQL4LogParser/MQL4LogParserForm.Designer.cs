@@ -42,6 +42,7 @@
             GenerateStandardReportButton = new Button();
             InformationGroupBox = new GroupBox();
             LoggerTextBox = new TextBox();
+            GenerateOpenedAtHourlyReportButton = new Button();
             InputGroupBox.SuspendLayout();
             OutputGroupBox.SuspendLayout();
             InformationGroupBox.SuspendLayout();
@@ -90,6 +91,7 @@
             // 
             // OutputGroupBox
             // 
+            OutputGroupBox.Controls.Add(GenerateOpenedAtHourlyReportButton);
             OutputGroupBox.Controls.Add(GenerateHourlyReportButton);
             OutputGroupBox.Controls.Add(EndDateTimePicker);
             OutputGroupBox.Controls.Add(StartDateTimePicker);
@@ -106,9 +108,9 @@
             // GenerateHourlyReportButton
             // 
             GenerateHourlyReportButton.Enabled = false;
-            GenerateHourlyReportButton.Location = new Point(491, 21);
+            GenerateHourlyReportButton.Location = new Point(395, 21);
             GenerateHourlyReportButton.Name = "GenerateHourlyReportButton";
-            GenerateHourlyReportButton.Size = new Size(280, 50);
+            GenerateHourlyReportButton.Size = new Size(185, 50);
             GenerateHourlyReportButton.TabIndex = 5;
             GenerateHourlyReportButton.Text = "Generate Hourly Report";
             GenerateHourlyReportButton.UseVisualStyleBackColor = true;
@@ -155,9 +157,9 @@
             // GenerateStandardReportButton
             // 
             GenerateStandardReportButton.Enabled = false;
-            GenerateStandardReportButton.Location = new Point(207, 21);
+            GenerateStandardReportButton.Location = new Point(204, 21);
             GenerateStandardReportButton.Name = "GenerateStandardReportButton";
-            GenerateStandardReportButton.Size = new Size(280, 50);
+            GenerateStandardReportButton.Size = new Size(185, 50);
             GenerateStandardReportButton.TabIndex = 0;
             GenerateStandardReportButton.Text = "Generate Standard Report";
             GenerateStandardReportButton.UseVisualStyleBackColor = true;
@@ -182,6 +184,17 @@
             LoggerTextBox.ScrollBars = ScrollBars.Vertical;
             LoggerTextBox.Size = new Size(763, 211);
             LoggerTextBox.TabIndex = 0;
+            // 
+            // GenerateOpenedAtHourlyReportButton
+            // 
+            GenerateOpenedAtHourlyReportButton.Enabled = false;
+            GenerateOpenedAtHourlyReportButton.Location = new Point(586, 21);
+            GenerateOpenedAtHourlyReportButton.Name = "GenerateOpenedAtHourlyReportButton";
+            GenerateOpenedAtHourlyReportButton.Size = new Size(185, 50);
+            GenerateOpenedAtHourlyReportButton.TabIndex = 6;
+            GenerateOpenedAtHourlyReportButton.Text = "Generate Opened At Hourly Report";
+            GenerateOpenedAtHourlyReportButton.UseVisualStyleBackColor = true;
+            GenerateOpenedAtHourlyReportButton.Click += GenerateOpenedAtHourlyReportButton_Click;
             // 
             // MQL4LogParserForm
             // 
@@ -218,5 +231,6 @@
         private Button ProcessLogFileButton;
         private Button BrowseButton;
         private Button GenerateHourlyReportButton;
+        private Button GenerateOpenedAtHourlyReportButton;
     }
 }

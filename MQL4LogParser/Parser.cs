@@ -99,5 +99,22 @@ namespace MQL4LogParser
             }
             Logger.WriteLine($"Report completed.  Generated '{outFilePath}'\n");
         }
+
+        public void WriteOpenedAtHourlyReport(string outFilePath, DateTime start, DateTime end)
+        {
+            Logger.WriteLine("Writing Hourly Report.  Please wait...");
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                sw.WriteLine("Opened At Hour,Opens,Closes,Stops,Takes");
+                foreach (KeyValuePair<DateTime, OrderStats.HourlyOrderStat> pair in OrderStats.OpenedAtHour)
+                {
+                    if (start <= pair.Key && pair.Key <= end)
+                    {
+                        sw.WriteLine($"{pair.Key},{pair.Value.Opens},{pair.Value.Closes},{pair.Value.Stops},{pair.Value.Takes}");
+                    }
+                }
+            }
+            Logger.WriteLine($"Report completed.  Generated '{outFilePath}'\n");
+        }
     }
 }

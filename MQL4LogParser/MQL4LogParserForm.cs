@@ -46,6 +46,7 @@ namespace MQL4LogParser
 
             GenerateStandardReportButton.Enabled = true;
             GenerateHourlyReportButton.Enabled = true;
+            GenerateOpenedAtHourlyReportButton.Enabled = true;
         }
 
         private void EnableDateTimePicker(DateTimePicker dtp, DateTime defaultValue)
@@ -78,6 +79,23 @@ namespace MQL4LogParser
             try
             {
                 Parser.WriteHourlyReport($"{BrowseLogFilesDialog.FileName}_Hourly.csv", StartDateTimePicker.Value, EndDateTimePicker.Value);
+            }
+            catch (System.IO.IOException ex)
+            {
+                LogException(ex);
+            }
+            catch (Exception ex)
+            {
+                LogException("", ex);
+            }
+        }
+
+        private void GenerateOpenedAtHourlyReportButton_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                Parser.WriteOpenedAtHourlyReport($"{BrowseLogFilesDialog.FileName}_OpenedAtHourly.csv", StartDateTimePicker.Value, EndDateTimePicker.Value);
             }
             catch (System.IO.IOException ex)
             {
