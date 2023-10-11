@@ -52,7 +52,7 @@ namespace MQL4LogParser.Models
             OrderStats.TrackStat(datetime, Operation.TAKE, this.Order);
         }
 
-        private void Add(Operation operation, DateTime datetime)
+        private new void Add(Operation operation, DateTime datetime)
         {
             // Keep track of first and last operations timestamps
             if (OrderStats.Total == 0)
@@ -69,7 +69,7 @@ namespace MQL4LogParser.Models
 
     public static class OrderStats
     {
-        public class HourlyOrderStat
+        public class OperationCounter
         {
             public int Opens { get; set; } = 0;
             public int Closes { get; set; } = 0;
@@ -85,8 +85,10 @@ namespace MQL4LogParser.Models
         public static DateTime FirstOrderOperationTimestamp = default;
         public static DateTime LastOrderOperationTimestamp = default;
 
-        public static Dictionary<DateTime, HourlyOrderStat> ByTheHour = new Dictionary<DateTime, HourlyOrderStat>();
-        public static Dictionary<DateTime, HourlyOrderStat> OpenedAtHour = new Dictionary<DateTime, HourlyOrderStat>();
+        //public static Dictionary<DateTime, OperationCounter> ByTheHour = new Dictionary<DateTime, OperationCounter>();
+        public static Dictionary<DateTime, OperationCounter> OpenedAtHour = new Dictionary<DateTime, OperationCounter>();
+        public static Dictionary<DateTime, OperationCounter> OpenedOnDay = new Dictionary<DateTime, OperationCounter>();
+       
         public static void Reset()
         {
             TotalOpens = 0;
@@ -96,48 +98,61 @@ namespace MQL4LogParser.Models
             Total = 0;
             FirstOrderOperationTimestamp = default;
             LastOrderOperationTimestamp = default;
-            ByTheHour.Clear();
+            //ByTheHour.Clear();
+            OpenedAtHour.Clear();
+            OpenedOnDay.Clear();
         }
 
         public static void TrackStat(DateTime datetime, Operation operation, Order order)
         {
             // Get the current hour
-            DateTime currentHour = datetime.RoundDownToNearestHour();
+            DateTime currentHour = datetime.RoundDownHour();
+            DateTime currentDay = datetime.RoundDownDay();
             
-            // Create a new hour entry if needed
+            /*
             if (!ByTheHour.ContainsKey(currentHour))
             {
-                ByTheHour.Add(currentHour, new HourlyOrderStat());
+                ByTheHour.Add(currentHour, new OperationCounter());
             }
+            */
 
             if (!OpenedAtHour.ContainsKey(currentHour))
             {
-                OpenedAtHour.Add(currentHour, new HourlyOrderStat());
+                OpenedAtHour.Add(currentHour, new OperationCounter());
+            }
+
+            if (!OpenedOnDay.ContainsKey(currentDay))
+            {
+                OpenedOnDay.Add(currentDay, new OperationCounter());
             }
 
             // Increment the relavent operation during that hour
-            DateTime OpenedAtDateTimeHour = !operation.Equals(Operation.OPEN) ? order.History[Operation.OPEN].RoundDownToNearestHour() : default;
+            DateTime OpenedAtDateTime = !operation.Equals(Operation.OPEN) ? order.History[Operation.OPEN] : default;
             switch (operation)
             {
                 case Operation.OPEN:
                     TotalOpens++;
-                    ByTheHour[currentHour].Opens++;
+                    //ByTheHour[currentHour].Opens++;
                     OpenedAtHour[currentHour].Opens++;
+                    OpenedOnDay[currentDay].Opens++;
                     break;
                 case Operation.CLOSE:
                     TotalCloses++;
-                    ByTheHour[currentHour].Closes++;
-                    OpenedAtHour[OpenedAtDateTimeHour].Closes++;
+                    //ByTheHour[currentHour].Closes++;
+                    OpenedAtHour[OpenedAtDateTime.RoundDownHour()].Closes++;
+                    OpenedOnDay[OpenedAtDateTime.RoundDownDay()].Closes++;
                     break;
                 case Operation.STOP:
                     TotalStops++;
-                    ByTheHour[currentHour].Stops++;
-                    OpenedAtHour[OpenedAtDateTimeHour].Stops++;
+                    //ByTheHour[currentHour].Stops++;
+                    OpenedAtHour[OpenedAtDateTime.RoundDownHour()].Stops++;
+                    OpenedOnDay[OpenedAtDateTime.RoundDownDay()].Stops++;
                     break;
                 case Operation.TAKE: 
                     TotalTakes++;
-                    ByTheHour[currentHour].Takes++;
-                    OpenedAtHour[OpenedAtDateTimeHour].Takes++;
+                    //ByTheHour[currentHour].Takes++;
+                    OpenedAtHour[OpenedAtDateTime.RoundDownHour()].Takes++;
+                    OpenedOnDay[OpenedAtDateTime.RoundDownDay()].Takes++;
                     break;
             }
         }

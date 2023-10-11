@@ -11,7 +11,6 @@ namespace MQL4LogParser
 
         public void Parse(string inFilePath)
         {
-            Logger.SystemLogFilePath = Path.ChangeExtension(inFilePath, $"MQL4LogParser-{DateTime.Now.ToString("yyyyMMddTHHmmss")}.log");
             using (StreamReader sr = new StreamReader(inFilePath))
             {
                 string line;
@@ -83,13 +82,32 @@ namespace MQL4LogParser
             Logger.WriteLine($"Report completed.  Generated '{outFilePath}'\n");
         }
 
+        /*
         public void WriteHourlyReport(string outFilePath, DateTime start, DateTime end)
         {
             Logger.WriteLine("Writing Hourly Report.  Please wait...");
             using (StreamWriter sw = new StreamWriter(outFilePath))
             {
                 sw.WriteLine("Hour,Opens,Closes,Stops,Takes");
-                foreach (KeyValuePair<DateTime, OrderStats.HourlyOrderStat> pair in OrderStats.ByTheHour)
+                foreach (KeyValuePair<DateTime, OrderStats.OperationCounter> pair in OrderStats.ByTheHour)
+                {
+                    if (start <= pair.Key && pair.Key <= end)
+                    {
+                        sw.WriteLine($"{pair.Key},{pair.Value.Opens},{pair.Value.Closes},{pair.Value.Stops},{pair.Value.Takes}");
+                    }
+                }
+            }
+            Logger.WriteLine($"Report completed.  Generated '{outFilePath}'\n");
+        }
+        */
+
+        public void WriteOpenedAtHourlyReport(string outFilePath, DateTime start, DateTime end)
+        {
+            Logger.WriteLine("Writing Hourly Report.  Please wait...");
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                sw.WriteLine("Opened At Hour,Opens,Closes,Stops,Takes");
+                foreach (KeyValuePair<DateTime, OrderStats.OperationCounter> pair in OrderStats.OpenedAtHour)
                 {
                     if (start <= pair.Key && pair.Key <= end)
                     {
@@ -100,17 +118,17 @@ namespace MQL4LogParser
             Logger.WriteLine($"Report completed.  Generated '{outFilePath}'\n");
         }
 
-        public void WriteOpenedAtHourlyReport(string outFilePath, DateTime start, DateTime end)
+        public void WriteOpenedAtDailyReport(string outFilePath, DateTime start, DateTime end)
         {
             Logger.WriteLine("Writing Hourly Report.  Please wait...");
             using (StreamWriter sw = new StreamWriter(outFilePath))
             {
-                sw.WriteLine("Opened At Hour,Opens,Closes,Stops,Takes");
-                foreach (KeyValuePair<DateTime, OrderStats.HourlyOrderStat> pair in OrderStats.OpenedAtHour)
+                sw.WriteLine("Opened On Day,Opens,Closes,Stops,Takes");
+                foreach (KeyValuePair<DateTime, OrderStats.OperationCounter> pair in OrderStats.OpenedOnDay)
                 {
                     if (start <= pair.Key && pair.Key <= end)
                     {
-                        sw.WriteLine($"{pair.Key},{pair.Value.Opens},{pair.Value.Closes},{pair.Value.Stops},{pair.Value.Takes}");
+                        sw.WriteLine($"{pair.Key.ToString("yyyy-MM-dd")},{pair.Value.Opens},{pair.Value.Closes},{pair.Value.Stops},{pair.Value.Takes}");
                     }
                 }
             }

@@ -1,8 +1,15 @@
-﻿namespace MQL4LogParser.Extensions
+﻿using MQL4LogParser.Enums;
+
+namespace MQL4LogParser.Extensions
 {
     public static class DateTimeExtensions
     {
-        public static DateTime RoundDownToNearestHour(this DateTime dateTime)
+        public static DateTime RoundDownDay(this DateTime dateTime)
+        {
+            return dateTime.Date;
+        }
+
+        public static DateTime RoundDownHour(this DateTime dateTime)
         {
             return dateTime.Date.AddHours(dateTime.Hour);
         }
@@ -17,4 +24,6 @@
             return start <= datetime && end < datetime;
         } 
     }
+
+    
 }
