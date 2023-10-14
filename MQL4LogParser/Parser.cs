@@ -6,11 +6,14 @@ namespace MQL4LogParser
 {
     public class Parser
     {
+        private int _shiftHours { get; set; }
         public Logger Logger { get; set; }
         public List<Order> Orders { get; private set; } = new List<Order>();
 
-        public void Parse(string inFilePath)
+        public void Parse(string inFilePath, int shiftHours)
         {
+            _shiftHours = shiftHours;
+
             using (StreamReader sr = new StreamReader(inFilePath))
             {
                 string line;
@@ -39,23 +42,27 @@ namespace MQL4LogParser
                 }
 
                 Order CurrentOrder = Orders.First(o => o.Id.Equals(order));
-
-                // Update the order record with new action history
-                if (line.Contains(Operation.OPEN))
+                DateTime datetime;
+                
+                if (DateTimeExtensions.TryConvertToDateTime(words[2], words[3], out datetime, _shiftHours))
                 {
-                    CurrentOrder.History.AddOpen(words[2], words[3]);
-                }
-                else if (line.Contains(Operation.CLOSE))
-                {
-                    CurrentOrder.History.AddClose(words[2], words[3]);
-                }
-                else if (line.Contains(Operation.STOP))
-                {
-                    CurrentOrder.History.AddStop(words[2], words[3]);
-                }
-                else if (line.Contains(Operation.TAKE))
-                {
-                    CurrentOrder.History.AddTake(words[2], words[3]);
+                    // Update the order record with new action history
+                    if (line.Contains(Operation.OPEN))
+                    {
+                        CurrentOrder.History.AddOpen(datetime);
+                    }
+                    else if (line.Contains(Operation.CLOSE))
+                    {
+                        CurrentOrder.History.AddClose(datetime);
+                    }
+                    else if (line.Contains(Operation.STOP))
+                    {
+                        CurrentOrder.History.AddStop(datetime);
+                    }
+                    else if (line.Contains(Operation.TAKE))
+                    {
+                        CurrentOrder.History.AddTake(datetime);
+                    }
                 }
             }
         }

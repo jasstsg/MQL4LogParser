@@ -2,4 +2,5 @@ C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4L
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4LogParser.dll
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4LogParser.deps.json
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4LogParser.runtimeconfig.json
+C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4LogParser.dll.config
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\app.publish\MQL4LogParser.pdb

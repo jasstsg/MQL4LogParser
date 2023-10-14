@@ -14,6 +14,7 @@ C:\repo\MQL4LogParser\MQL4LogParser\obj\Release\net6.0-windows\refint\MQL4LogPar
 C:\repo\MQL4LogParser\MQL4LogParser\obj\Release\net6.0-windows\MQL4LogParser.pdb
 C:\repo\MQL4LogParser\MQL4LogParser\obj\Release\net6.0-windows\MQL4LogParser.genruntimeconfig.cache
 C:\repo\MQL4LogParser\MQL4LogParser\obj\Release\net6.0-windows\ref\MQL4LogParser.dll
+C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\MQL4LogParser.dll.config
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\MQL4LogParser.dll.manifest
 C:\repo\MQL4LogParser\MQL4LogParser\bin\Release\net6.0-windows\MQL4LogParser.application
 C:\repo\MQL4LogParser\MQL4LogParser\obj\Release\net6.0-windows\MQL4LogParser.dll.manifest

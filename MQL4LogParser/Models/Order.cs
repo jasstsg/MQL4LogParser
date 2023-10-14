@@ -1,7 +1,5 @@
 ﻿using MQL4LogParser.Enums;
 using MQL4LogParser.Extensions;
-using System;
-using static System.Windows.Forms.AxHost;
 
 namespace MQL4LogParser.Models
 {
@@ -24,30 +22,26 @@ namespace MQL4LogParser.Models
             Order = order;
         }
 
-        public void AddOpen(string date, string time)
+        public void AddOpen(DateTime datetime)
         {
-            DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.OPEN, datetime);
             OrderStats.TrackStat(datetime, Operation.OPEN, this.Order);
         }
 
-        public void AddClose(string date, string time)
+        public void AddClose(DateTime datetime)
         {
-            DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.CLOSE, datetime);
             OrderStats.TrackStat(datetime, Operation.CLOSE, this.Order);
         }
 
-        public void AddStop(string date, string time)
+        public void AddStop(DateTime datetime)
         {
-            DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.STOP, datetime);
             OrderStats.TrackStat(datetime, Operation.STOP, this.Order);
         }
 
-        public void AddTake(string date, string time)
+        public void AddTake(DateTime datetime)
         {
-            DateTime datetime = DateTimeExtensions.ToDateTime(date, time);
             this.Add(Operation.TAKE, datetime);
             OrderStats.TrackStat(datetime, Operation.TAKE, this.Order);
         }
